@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h1 class="mb-4">About Us</h1>
+
+  <div class="row">
+    <div class="col-md-6">
+      <img src="{% static 'images/about-us.jpg' %}" alt="About Us" class="img-fluid rounded shadow-sm mb-4">
+    </div>
+    <div class="col-md-6">
+      <h3>Our Mission</h3>
+      <p>We strive to deliver the best event management experience with seamless booking, excellent customer support, and a user-friendly platform.</p>
+
+      <h3>Who We Are</h3>
+      <p>Our team consists of passionate developers, event planners, and customer service experts dedicated to making your events successful and memorable.</p>
+
+      <h3>Why Choose Us?</h3>
+      <ul>
+        <li>Easy-to-use booking system</li>
+        <li>Secure payments and ticketing</li>
+        <li>24/7 customer support</li>
+        <li>Wide variety of events</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

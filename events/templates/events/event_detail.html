@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  {{ event.title }}
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <h1 class="mb-4">{{ event.title }}</h1>
+
+  {% if event.image %}
+  <img
+    src="{{ event.image.url }}"
+    alt="{{ event.title }}"
+    class="img-fluid rounded mb-4"
+    style="max-height: 400px; object-fit: cover"
+/>
+  {% endif %}
+
+  <div class="mb-3">
+    <strong>Date:</strong> {{ event.date }}
+  </div>
+  <div class="mb-3">
+    <strong>Time:</strong> {{ event.time }}
+  </div>
+  <div class="mb-3">
+    <strong>Location:</strong> {{ event.venue }}
+  </div>
+
+  <div class="mb-4">
+    <strong>Description:</strong>
+    <p>{{ event.description|linebreaks }}</p>
+  </div>
+
+  {% if user.is_authenticated %}
+    <a href="{% url 'bookings:book_event' event.id %}" class="btn btn-success">Book This Event</a>
+  {% else %}
+    <p>Please <a href="{% url 'users:login' %}">login</a> to book this event.</p>
+  {% endif %}
+
+  <a href="{% url 'events:event_list' %}" class="btn btn-secondary mt-3">Back to Events</a>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Bookings{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <h1 class="mb-4">My Bookings</h1>
+
+  {% if bookings %}
+    <div class="list-group">
+      {% for booking in bookings %}
+        <div class="list-group-item mb-3 shadow-sm rounded">
+          <h5>Event: {{ booking.event.title }}</h5>
+          <p><strong>Date:</strong> {{ booking.event.date|date:"F j, Y" }}</p>
+          <p><strong>Location:</strong> {{ booking.event.location }}</p>
+          <p><strong>Seats booked:</strong> {{ booking.seats }}</p>
+          <p><strong>Booking Date:</strong> {{ booking.created_at|date:"F j, Y, g:i a" }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info" role="alert">
+      You have no bookings yet.
+    </div>
+  {% endif %}
+
+  <a href="{% url 'events:event_list' %}" class="btn btn-primary mt-4">Browse Events</a>
+</div>
+{% endblock %}

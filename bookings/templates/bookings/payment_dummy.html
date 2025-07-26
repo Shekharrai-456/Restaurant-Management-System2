@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dummy Payment{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <h1 class="mb-4">Dummy Payment Page</h1>
+
+  <p class="lead">You have selected <strong>{{ payment_method|default:"[No Method Selected]" }}</strong> as your payment method.</p>
+
+  <form method="post" action="{% url 'payments:confirm_payment' %}">
+    {% csrf_token %}
+    
+    <div class="mb-3">
+      <label for="card_number" class="form-label">Card Number</label>
+      <input type="text" class="form-control" id="card_number" name="card_number" placeholder="1234 5678 9012 3456" required>
+    </div>
+
+    <div class="mb-3 row">
+      <div class="col-md-6">
+        <label for="expiry_date" class="form-label">Expiry Date</label>
+        <input type="text" class="form-control" id="expiry_date" name="expiry_date" placeholder="MM/YY" required>
+      </div>
+      <div class="col-md-6">
+        <label for="cvv" class="form-label">CVV</label>
+        <input type="password" class="form-control" id="cvv" name="cvv" placeholder="123" required>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Make Payment</button>
+  </form>
+</div>
+{% endblock %}

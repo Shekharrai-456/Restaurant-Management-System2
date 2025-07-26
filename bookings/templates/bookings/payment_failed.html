@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Payment Failed{% endblock %}
+
+{% block content %}
+<div class="container text-center my-5">
+  <div class="alert alert-danger" role="alert">
+    <h2 class="mb-3">Payment Failed</h2>
+    <p>Unfortunately, your payment could not be processed.</p>
+    {% if error_message %}
+      <p><strong>Error:</strong> {{ error_message }}</p>
+    {% endif %}
+  </div>
+  
+  <a href="{% url 'payments:payment_choice' %}" class="btn btn-warning">Try Again</a>
+  <a href="{% url 'core:homepage' %}" class="btn btn-secondary ms-2">Return to Home</a>
+</div>
+{% endblock %}

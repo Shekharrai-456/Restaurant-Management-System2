@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}All Bookings{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="mb-4">All Bookings</h2>
+  {% if bookings %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Event</th>
+          <th>User</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for booking in bookings %}
+        <tr>
+          <td>{{ booking.event.title }}</td>
+          <td>{{ booking.user.username }}</td>
+          <td>{{ booking.booked_at|date:"M d, Y H:i" }}</td>
+          <td>
+            {% if booking.is_paid %}
+              <span class="badge bg-success">Paid</span>
+            {% else %}
+              <span class="badge bg-warning text-dark">Pending</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No bookings found.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Event Ticket</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 30px;
+      }
+      .ticket {
+        border: 2px dashed #333;
+        padding: 20px;
+        width: 600px;
+      }
+      h2 {
+        text-align: center;
+      }
+      .info {
+        margin: 10px 0;
+      }
+      .info span {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="ticket">
+      <h2>Event Ticket</h2>
+      <div class="info"><span>Event:</span> {{ booking.event.title }}</div>
+      <div class="info">
+        <span>Description:</span> {{ booking.event.description }}
+      </div>
+      <div class="info">
+        <span>Location:</span> {{ booking.event.location }}
+      </div>
+      <div class="info"><span>Date:</span> {{ booking.event.date }}</div>
+      <div class="info"><span>Time:</span> {{ booking.event.time }}</div>
+      <div class="info">
+        <span>Booked By:</span> {{ booking.user.username }}
+      </div>
+      <div class="info"><span>Booking ID:</span> {{ booking.id }}</div>
+      <div class="info"><span>Booked On:</span> {{ booking.booked_at }}</div>
+      <p style="text-align: center; margin-top: 30px">
+        Please present this ticket at the event.
+      </p>
+    </div>
+  </body>
+</html>

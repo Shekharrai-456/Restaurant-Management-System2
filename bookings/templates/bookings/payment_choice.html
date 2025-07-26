@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Choose Payment Method{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <h1 class="mb-4">Choose Payment Method</h1>
+
+  <form method="post" action="{% url 'payments:process_payment' %}">
+    {% csrf_token %}
+    <div class="mb-3">
+      <input type="hidden" name="booking_id" value="{{ booking.id }}">
+      <label for="payment_method" class="form-label">Select a payment method:</label>
+      <select class="form-select" id="payment_method" name="payment_method" required>
+        <option value="" selected disabled>-- Select Payment Method --</option>
+        <option value="credit_card">Credit Card</option>
+        <option value="paypal">PayPal</option>
+        <option value="bank_transfer">Bank Transfer</option>
+        <!-- Add more payment options as needed -->
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Proceed to Payment</button>
+  </form>
+</div>
+{% endblock %}
