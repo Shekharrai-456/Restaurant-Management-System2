@@ -23,3 +23,4 @@ def contact(request):
 
 def dashboard(request):
     return render(request, 'core/dashboard.html')
+

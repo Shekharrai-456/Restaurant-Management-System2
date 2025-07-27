@@ -60,3 +60,4 @@ def edit_profile(request):
 def custom_logout(request):
     logout(request)
     return redirect('homepage')  # or any landing page
+
