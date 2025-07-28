@@ -1,5 +1,3 @@
-# bookings/views.py
-
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Booking
 from .forms import BookingForm
@@ -39,7 +37,6 @@ def payment_choice(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id, user=request.user, is_paid=False)
     return render(request, 'bookings/payment_choice.html', {'booking': booking})
 
-# Dummy Payment View
 @login_required
 def dummy_payment(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id, user=request.user, is_paid=False)
@@ -55,7 +52,12 @@ def booking_list(request):
         bookings = Booking.objects.filter(user=request.user).order_by('-booked_at')
     return render(request, 'bookings/booking_list.html', {'bookings': bookings})
 
-# ✅ PDF Ticket Download View
+# Your new booking_detail view
+@login_required
+def booking_detail(request, pk):
+    booking = get_object_or_404(Booking, pk=pk, user=request.user)
+    return render(request, 'bookings/booking_detail.html', {'booking': booking})
+
 @login_required
 def download_ticket(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id, user=request.user, is_paid=True)

@@ -22,5 +22,5 @@ def contact(request):
     return render(request, 'core/contact.html', {'form': form})
 
 def dashboard(request):
-    return render(request, 'core/dashboard.html')
+    return render(request, 'core/homepage.html')
 

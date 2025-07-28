@@ -14,3 +14,4 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
         (None, {'fields': ('bio', 'dark_mode_enabled')}),
     )
+

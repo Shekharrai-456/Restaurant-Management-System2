@@ -9,7 +9,7 @@ urlpatterns = [
     path('success/<int:booking_id>/', views.booking_success, name='booking_success'),
     path('my-bookings/', views.my_bookings, name='my_bookings'),
     path('download/<int:booking_id>/', views.download_ticket, name='download_ticket'),
-
+    path('booking/<int:pk>/', views.booking_detail, name='booking_detail'),
 
     # Payment flow
     path('payment/<int:booking_id>/', views.payment_choice, name='payment_choice'),

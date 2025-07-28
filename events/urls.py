@@ -9,4 +9,5 @@ urlpatterns = [
     path('create/', views.event_create, name='event_create'),
     path('approval/', views.event_approval, name='event_approval'),
     path('approve/<int:pk>/', views.approve_event, name='approve_event'),
+    
 ]

@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'payments',
     'reviews',
     'crispy_forms',
-     'crispy_bootstrap5',
+    'crispy_bootstrap5',
     
 ]
 
@@ -52,6 +52,7 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'users.CustomUser'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
+LOGIN_URL = '/users/login/'  # point to your actual login page
 
 
 MIDDLEWARE = [

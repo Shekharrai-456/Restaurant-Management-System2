@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import RedirectView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,6 +30,9 @@ urlpatterns = [
     path('reviews/', include('reviews.urls')),
     path('payments/', include('payments.urls')),
     path('api/', include('api.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),  # ✅ this line adds password_reset, etc.
+    path('accounts/login/', RedirectView.as_view(url='/users/login/', permanent=False)),  # ✅ redirect
+
 ]
 
 if settings.DEBUG:
