@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Book Event{% endblock %}
+{% block title %}Book Event - {{ event.title }}{% endblock %}
 
 {% block content %}
 <style>
     .booking-card {
-        max-width: 600px;
+        max-width: 800px;
         margin: 2rem auto;
         padding: 2rem;
         border-radius: 10px;
@@ -39,7 +39,6 @@
         font-weight: 500;
         border-radius: 8px;
         transition: all 0.3s;
-        width: 100%;
     }
     
     .btn-confirm:hover {
@@ -51,6 +50,17 @@
         border-left: 3px solid #6e8efb;
         padding-left: 1rem;
         margin: 1.5rem 0;
+    }
+    
+    .ticket-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .ticket-table th, .ticket-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid #e0e0e0;
     }
 </style>
 
@@ -65,7 +75,7 @@
                 <div>
                     <p class="mb-1"><i class="bi bi-calendar-event text-primary"></i> {{ event.date|date:"l, F d, Y" }}</p>
                     <p class="mb-1"><i class="bi bi-clock text-primary"></i> {{ event.time|time:"g:i A" }}</p>
-                    <p><i class="bi bi-geo-alt text-primary"></i> {{ event.venue }}</p>
+                    <p><i class="bi bi-geo-alt text-primary"></i> {{ event.location }}</p>
                 </div>
                 {% if event.image %}
                 <img src="{{ event.image.url }}" alt="{{ event.title }}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px;">
@@ -76,25 +86,42 @@
         <!-- Ticket Selection -->
         <div class="ticket-summary">
             <h5 class="mb-3">Ticket Selection</h5>
-            <table class="table">
+            <table class="ticket-table">
                 <thead>
                     <tr>
                         <th>Ticket Type</th>
                         <th>Quantity</th>
                         <th>Price</th>
+                        <th>Subtotal</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>General Admission</td>
-                        <td>1</td>
-                        <td>Rs.1,500</td>
+                        <td>
+                            <select class="form-select" name="ticket_type" required>
+                                {% if event.price_normal > 0 %}
+                                <option value="normal">Standard - Rs. {{ event.price_normal }}</option>
+                                {% endif %}
+                                {% if event.price_vip > 0 %}
+                                <option value="vip">VIP - Rs. {{ event.price_vip }}</option>
+                                {% endif %}
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" name="quantity" min="1" value="1" required>
+                        </td>
+                        <td class="price-display">
+                            Rs. {{ event.price_normal }}
+                        </td>
+                        <td class="subtotal-display">
+                            Rs. {{ event.price_normal }}
+                        </td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th colspan="2">Total</th>
-                        <th>Rs.1,500</th>
+                        <th colspan="3" class="text-end">Total:</th>
+                        <th class="total-display">Rs. {{ event.price_normal }}</th>
                     </tr>
                 </tfoot>
             </table>
@@ -103,7 +130,7 @@
         <!-- Booking Form -->
         <form method="POST" novalidate>
             {% csrf_token %}
-            {{ form.non_field_errors }}
+            <input type="hidden" name="event_id" value="{{ event.id }}">
             
             <h5 class="mb-3">Attendee Information</h5>
             
@@ -124,7 +151,7 @@
             
             <div class="d-grid gap-2 mt-4">
                 <button type="submit" class="btn btn-confirm">
-                    Confirm Booking
+                    Proceed to Payment
                 </button>
                 <a href="{% url 'events:event_detail' event.id %}" class="btn btn-outline-secondary">
                     Back to Event
@@ -133,6 +160,30 @@
         </form>
     </div>
 </div>
+
+<!-- <script>
+    // Update prices when ticket type or quantity changes
+    document.querySelector('select[name="ticket_type"]').addEventListener('change', updatePrices);
+    document.querySelector('input[name="quantity"]').addEventListener('input', updatePrices);
+    
+    function updatePrices() {
+        const ticketType = document.querySelector('select[name="ticket_type"]').value;
+        const quantity = parseInt(document.querySelector('input[name="quantity"]').value);
+        let price = 0;
+        
+        if (ticketType === 'normal') {
+            price = {{ event.price_normal }};
+        } else if (ticketType === 'vip') {
+            price = {{ event.price_vip }};
+        }
+        
+        const subtotal = price * quantity;
+        
+        document.querySelector('.price-display').textContent = 'Rs. ' + price;
+        document.querySelector('.subtotal-display').textContent = 'Rs. ' + subtotal;
+        document.querySelector('.total-display').textContent = 'Rs. ' + subtotal;
+    }
+</script> -->
 
 <!-- Add to your base.html if not already present -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">

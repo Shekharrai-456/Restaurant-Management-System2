@@ -14,6 +14,8 @@ class Booking(models.Model):
     ticket_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     is_paid = models.BooleanField(default=False)
     booked_at = models.DateTimeField(auto_now_add=True)
-
+    ticket_type = models.CharField(max_length=10, choices=[('normal', 'Normal'), ('vip', 'VIP')])
+    quantity = models.PositiveIntegerField(default=1)
+    price = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
     def __str__(self):
         return f"{self.user.username} - {self.event.title} - {self.ticket_id}"

@@ -9,7 +9,7 @@ from xhtml2pdf import pisa
 @login_required
 def payment_choice(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id, user=request.user)
-    return render(request, 'bookings/payment_choice.html', {'booking': booking})
+    return render(request, 'payments/payment_choice.html', {'booking': booking})
 
 @login_required
 def dummy_payment(request, booking_id):

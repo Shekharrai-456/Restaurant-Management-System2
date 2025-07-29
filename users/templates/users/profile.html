@@ -141,7 +141,7 @@
         <div class="mb-3">
           <label for="id_bio" class="form-label">Bio</label>
           <textarea class="form-control" id="id_bio" name="bio" rows="3">
-{{ form.bio.value|default:user.profile.bio }}</textarea
+{{ form.bio.value|default:user.bio }}</textarea
           >
         </div>
 
@@ -154,7 +154,7 @@
       <h4 class="profile-section-title">Account Settings</h4>
       <div class="d-flex flex-wrap gap-3">
         <a
-          href="{% url 'users:password_change' %}"
+          href="{% url 'password_change' %}"
           class="btn btn-outline-primary"
         >
           Change Password

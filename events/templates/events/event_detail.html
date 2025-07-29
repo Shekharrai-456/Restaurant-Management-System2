@@ -41,10 +41,6 @@
         margin-bottom: 2rem;
     }
     
-    .location-item {
-        margin-bottom: 0.5rem;
-    }
-    
     .ticket-table {
         width: 100%;
         border-collapse: collapse;
@@ -56,10 +52,31 @@
         border-bottom: 1px solid #e0e0e0;
     }
     
+    .ticket-table tr:last-child th,
+    .ticket-table tr:last-child td {
+        border-bottom: none;
+    }
+    
     .related-event {
         border-left: 3px solid #6e8efb;
         padding-left: 1rem;
         margin-bottom: 1.5rem;
+    }
+    
+    .organizer-info {
+        display: flex;
+        align-items: center;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e0e0e0;
+    }
+    
+    .organizer-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 1rem;
     }
 </style>
 
@@ -68,7 +85,7 @@
         <h1 class="mb-2">{{ event.title }}</h1>
         <div class="event-date">
             <strong>{{ event.date|date:"M d" }}</strong>  
-            {{ event.date|date:"l, F d" }}<br>
+            {{ event.date|date:"l, F d, Y" }}<br>
             {{ event.time|time:"g:i A" }}
         </div>
         <span class="event-status">
@@ -88,51 +105,103 @@
 
     <div class="row">
         <div class="col-lg-8">
-            <h4 class="mb-3">About This Event</h4>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4>About This Event</h4>
+                <span class="badge bg-primary">{{ event.get_category_display }}</span>
+            </div>
             <p>{{ event.description|linebreaks }}</p>
             
             <div class="location-card mt-4">
-                <h5 class="mb-3">Location</h5>
-                <p class="mb-4">{{ event.venue }}</p>
+                <h5 class="mb-3"><i class="bi bi-geo-alt"></i> Location</h5>
+                <p class="mb-4">{{ event.location }}</p>
+                
+                <div class="map-container mb-3" style="height: 200px; background-color: #eee; border-radius: 8px;">
+                    <!-- Map placeholder - replace with actual map integration -->
+                    <div class="d-flex justify-content-center align-items-center h-100 text-muted">
+                        <i class="bi bi-map" style="font-size: 2rem;"></i>
+                    </div>
+                </div>
+                
+                <h6 class="mb-3"><i class="bi bi-building"></i> Venue Details</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><i class="bi bi-info-circle"></i> {{ event.location }}</li>
+                    <li class="mb-2"><i class="bi bi-door-open"></i> Doors open at {{ event.time|time:"g:i A" }}</li>
+                    {% if event.venue_details %}
+                    <li><i class="bi bi-info-square"></i> {{ event.venue_details }}</li>
+                    {% endif %}
+                </ul>
+            </div>
+            
+            <div class="organizer-info">
+                {% if event.organizer.profile.avatar %}
+                <img src="{{ event.organizer.profile.avatar.url }}" alt="{{ event.organizer.username }}" class="organizer-avatar">
+                {% else %}
+                <img src="{% static 'images/default-avatar.png' %}" alt="Default Avatar" class="organizer-avatar">
+                {% endif %}
+                <div>
+                    <h6>Organized by</h6>
+                    <p class="mb-0">{{ event.organizer.username }}</p>
+                    {% if event.organizer.profile.bio %}
+                    <p class="text-muted small">{{ event.organizer.profile.bio|truncatechars:100 }}</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
         
         <div class="col-lg-4">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm sticky-top" style="top: 20px;">
                 <div class="card-body">
-                    <h5 class="card-title mb-4">Ticket Details</h5>
+                    <h5 class="card-title mb-4"><i class="bi bi-ticket-perforated"></i> Ticket Options</h5>
                     
                     <table class="ticket-table mb-4">
                         <tbody>
+                            {% if event.price_normal > 0 %}
                             <tr>
-                                <th>Early Bird</th>
-                                <td>Rs.1,000</td>
+                                <th>Standard Ticket</th>
+                                <td class="text-end">Rs. {{ event.price_normal }}</td>
                             </tr>
+                            {% endif %}
+                            
+                            {% if event.price_vip > 0 %}
                             <tr>
-                                <th>General Admission</th>
-                                <td>Rs.1,500</td>
+                                <th>VIP Ticket</th>
+                                <td class="text-end">Rs. {{ event.price_vip }}</td>
                             </tr>
+                            {% endif %}
+                            
+                            {% if event.price_normal == 0 and event.price_vip == 0 %}
                             <tr>
-                                <th>VIP</th>
-                                <td>Rs.2,500</td>
+                                <th>Admission</th>
+                                <td class="text-end text-success">FREE</td>
                             </tr>
+                            {% endif %}
                         </tbody>
                     </table>
                     
-                    {% if user.is_authenticated %}
-                    <a href="{% url 'bookings:book_event' event.id %}" class="btn btn-primary w-100">
-                        Book Now
-                    </a>
+                    {% if not event.is_past_due %}
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'bookings:book_event' event.id %}" class="btn btn-primary w-100 mb-2">
+                            <i class="bi bi-cart3"></i> Book Now
+                        </a>
+                        {% else %}
+                        <div class="alert alert-info mb-3">
+                            Please <a href="{% url 'users:login' %}?next={% url 'bookings:book_event' event.id %}">login</a> to book tickets.
+                        </div>
+                        {% endif %}
                     {% else %}
-                    <div class="alert alert-info">
-                        Please <a href="{% url 'users:login' %}">login</a> to book tickets.
+                    <div class="alert alert-warning">
+                        This event has passed and tickets are no longer available.
                     </div>
                     {% endif %}
+                    
+                    <div class="text-center small text-muted mt-3">
+                        <i class="bi bi-info-circle"></i> All sales are final. No refunds.
+                    </div>
                 </div>
             </div>
             
             <div class="mt-4">
-                <h5 class="mb-3">Share This Event</h5>
+                <h5 class="mb-3"><i class="bi bi-share"></i> Share This Event</h5>
                 <div class="d-flex gap-2">
                     <a href="#" class="btn btn-outline-secondary"><i class="bi bi-facebook"></i></a>
                     <a href="#" class="btn btn-outline-secondary"><i class="bi bi-twitter"></i></a>
@@ -143,11 +212,34 @@
         </div>
     </div>
     
+    {% if related_events %}
     <div class="mt-5">
-        <h4 class="mb-4">Upcoming Events</h4>
+        <h4 class="mb-4"><i class="bi bi-calendar-event"></i> Similar Events</h4>
         
-        
+        {% for related in related_events %}
+        <div class="related-event">
+            <h5>{{ related.title }}</h5>
+            <p class="text-muted mb-1">
+                <i class="bi bi-calendar-event"></i> {{ related.date|date:"M j, Y" }} | 
+                <i class="bi bi-clock"></i> {{ related.time|time:"g:i A" }}
+            </p>
+            <p class="text-muted mb-1">
+                <i class="bi bi-geo-alt"></i> {{ related.location }}
+            </p>
+            <p class="text-muted">
+                {% if related.price_normal > 0 %}
+                From Rs. {{ related.price_normal }}
+                {% else %}
+                FREE
+                {% endif %}
+            </p>
+            <a href="{% url 'events:event_detail' related.id %}" class="btn btn-sm btn-outline-primary">
+                View Details
+            </a>
+        </div>
+        {% endfor %}
     </div>
+    {% endif %}
 </div>
 
 <!-- Add to your base.html if not already present -->
