@@ -24,6 +24,15 @@ SECRET_KEY = 'django-insecure-6h#%hmcry668!3$r&ntgewab=9791t-m$7*fn5mg6*6d2woi$=
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587  # Default port for the console email backend
+EMAIL_USE_TLS = True  # Use TLS for security
+
+EMAIL_HOST_USER = 'shekhar.rai456@gmail.com'  # No user needed for console backend
+EMAIL_HOST_PASSWORD = 'irwt mbdd nazc kdpv'  # No password needed for console backend
+DEFAULT_FROM_EMAIL = 'Event Booking <shekhar.rai456@gmail.com>'  # Default from email address
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development
+
 
 ALLOWED_HOSTS = []
 

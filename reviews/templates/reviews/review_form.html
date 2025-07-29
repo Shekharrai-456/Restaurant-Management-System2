@@ -1,32 +1,16 @@
 {% extends 'base.html' %}
-{% load static %}
-
-{% block title %}Submit Review{% endblock %}
-
+{% if existing_review %}
+    <div class="alert alert-info">
+        You're updating your previous review.
+    </div>
+{% endif %}
 {% block content %}
-<div class="container mt-5">
-  <h2 class="mb-4">Submit Your Review</h2>
-
-  <form method="post" action="{% url 'reviews:submit_review' %}">
-    {% csrf_token %}
-
-    <div class="mb-3">
-      <label for="id_rating" class="form-label">Rating</label>
-      {{ form.rating }}
-      {% if form.rating.errors %}
-        <div class="text-danger">{{ form.rating.errors }}</div>
-      {% endif %}
-    </div>
-
-    <div class="mb-3">
-      <label for="id_comment" class="form-label">Comment</label>
-      {{ form.comment }}
-      {% if form.comment.errors %}
-        <div class="text-danger">{{ form.comment.errors }}</div>
-      {% endif %}
-    </div>
-
-    <button type="submit" class="btn btn-primary">Submit Review</button>
-  </form>
+<div class="container py-4">
+    <h2>Write a Review for {{ event.title }}</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Submit Review</button>
+    </form>
 </div>
 {% endblock %}

@@ -18,22 +18,37 @@
             <p><strong>Total Price:</strong> Rs. {{ booking.price }}</p>
         </div>
 
-
         <h5 class="mb-3">Select Payment Method</h5>
         <form method="POST" action="{% url 'payments:process_payment' %}">
             {% csrf_token %}
             <input type="hidden" name="booking_id" value="{{ booking.id }}">
-            <div class="form-check mb-3">
-                <input class="form-check-input" type="radio" name="payment_method" value="khalti" id="khalti" checked>
-                <label class="form-check-label" for="khalti">
-                    <img src="{% static 'images/khalti.png' %}" alt="Khalti" style="height: 25px;"> Khalti Wallet
-                </label>
-            </div>
-            <div class="form-check mb-3">
-                <input class="form-check-input" type="radio" name="payment_method" value="esewa" id="esewa">
-                <label class="form-check-label" for="esewa">
-                    <img src="{% static 'images/esewa.png' %}" alt="eSewa" style="height: 25px;"> eSewa
-                </label>
+            
+            <div class="payment-methods">
+                <div class="payment-option mb-3">
+                    <input class="form-check-input" type="radio" name="payment_method" value="khalti" id="khalti" checked>
+                    <label class="payment-label" for="khalti">
+                        <div class="payment-logo">
+                            <img src="{% static 'images/khalti-logo.png' %}" alt="Khalti">
+                        </div>
+                        <div class="payment-details">
+                            <span class="payment-name">Khalti</span>
+                            <span class="payment-description">Pay with Khalti Wallet</span>
+                        </div>
+                    </label>
+                </div>
+                
+                <div class="payment-option mb-3">
+                    <input class="form-check-input" type="radio" name="payment_method" value="esewa" id="esewa">
+                    <label class="payment-label" for="esewa">
+                        <div class="payment-logo">
+                            <img src="{% static 'images/esewa-logo.png' %}" alt="eSewa">
+                        </div>
+                        <div class="payment-details">
+                            <span class="payment-name">eSewa</span>
+                            <span class="payment-description">Pay with eSewa Wallet</span>
+                        </div>
+                    </label>
+                </div>
             </div>
 
             <div class="d-grid gap-2 mt-4">
@@ -69,6 +84,72 @@
 
 .btn-primary:hover {
     background-color: #5a7df4;
+}
+
+.payment-methods {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.payment-option {
+    position: relative;
+}
+
+.payment-label {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.payment-label:hover {
+    background-color: #f8f9fa;
+}
+
+.payment-logo {
+    width: 60px;
+    height: 40px;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.payment-logo img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.payment-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.payment-name {
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.payment-description {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.form-check-input {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+}
+
+.payment-option label {
+    padding-left: 40px;
 }
 </style>
 {% endblock %}
