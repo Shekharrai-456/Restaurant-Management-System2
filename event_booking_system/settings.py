@@ -35,8 +35,7 @@ DEFAULT_FROM_EMAIL = 'Event Booking <shekhar.rai456@gmail.com>'  # Default from 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development
 
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(",")
-
+ALLOWED_HOSTS = ['restaurant-management-system2.onrender.com', '.onrender.com']
 # Application definition
 
 INSTALLED_APPS = [
